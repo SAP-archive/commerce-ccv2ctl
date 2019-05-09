@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"time"
 )
 
 var PORTAL, _ = url.Parse("https://portal.commerce.ondemand.com/")
@@ -238,9 +239,9 @@ func (pc *Client) CreateBuild(name, branch string) (newBuild BuildMeta) {
 
 	pc.postJSONorFail(action, build)
 	//unfortunately, the response of the POST request is NOT the build meta data, but sth else.
-	//-> fetch all builds and find the matching one
+	//-> wait a bit, fetch all builds and find the matching one
+	time.Sleep(1 * time.Second)
 	all := pc.GetAllBuilds()
-
 	found := false
 	for _, b := range all {
 		if b.Name == name && b.Branch == branch {
