@@ -35,6 +35,18 @@ This tool allows you to:
 
       ccv2ctl get initialpassword d1
 
+- get customer properties
+
+      ccv2ctl get customerproperties d1 --aspect hcs_common
+
+- set customer properties
+
+      ccv2ctl set customerproperties d1 --aspect hcs_common --propertyfile hcs_common.properties
+      # set properties from file hcs_common.properties
+
+      echo accstore.environment=dev | ccv2ctl set customerproperties d1 --aspect hcs_common
+      # set properties from stdin
+
 **Every command has a detailed help available, make sure to check it! (use `ccv2ctl help` as an entry point)**
 
 Since Go compiles executables as statically linked binaries, you can easily distribute this tool to you CI/CD servers (Jenkins, for example) and use it to automate builds and deployments to the Commerce Cloud.

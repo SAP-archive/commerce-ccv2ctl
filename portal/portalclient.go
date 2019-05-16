@@ -181,6 +181,25 @@ func (pc *Client) postJSONorFail(u *url.URL, payload interface{}) *http.Response
 	return resp
 }
 
+func (pc *Client) putJSONorFail(u *url.URL, payload interface{}) *http.Response {
+	j, err := json.Marshal(payload)
+	request, err := http.NewRequest("PUT", u.String(), bytes.NewReader(j))
+	request.Header.Add("content-type", "application/json")
+	fail(err)
+	for _, c := range pc.hc.Jar.Cookies(u) {
+		if c.Name == "XSRF-TOKEN" {
+			request.Header.Add("x-xsrf-token", c.Value)
+		}
+	}
+	resp, err := pc.hc.Do(request)
+	fail(err)
+	if resp.StatusCode >= 300 {
+		fail(errors.New(fmt.Sprintf("PUT %s: Expected HTTP 2XX status, got %d", u.String(), resp.StatusCode)))
+	}
+
+	return resp
+}
+
 func readJson(r io.ReadCloser, j interface{}) {
 	defer r.Close()
 	dec := json.NewDecoder(r)
@@ -209,6 +228,7 @@ const deployment = "/v1/subscriptions/%s/build"
 const running = "/v1/subscriptions/%s/environments/%s/runningdeployments/"
 const deployments = "/v1/subscriptions/%s/environments/%s/deployments"
 const passwords = "/v1/subscriptions/%s/environments/%s/serviceconfiguration/hcs_admin/property/initialpassword"
+const properties = "/v1/subscriptions/%s/environments/%s/serviceconfiguration/%s/property/customer-properties"
 
 func (pc *Client) GetAllBuilds() (meta []BuildMeta) {
 
@@ -302,6 +322,40 @@ func (pc *Client) GetDeployments(environment string) (r []RunningDeployment) {
 func (pc *Client) GetInitialPasswords(environment string) (p InitialPasswords) {
 
 	api := resolveAPI(fmt.Sprintf(passwords, pc.subscription, environment))
+	resp := pc.getOrFail(api)
+	readJson(resp.Body, &p)
+
+	return p
+}
+
+func (pc *Client) SetCustomerProperties(environment, aspect, filename string) (p Properties) {
+
+	var value string
+
+	if (filename == "-") {
+		data, err := ioutil.ReadAll(os.Stdin)
+		fail(err)
+		value = string(data)
+	} else {
+		f, err := os.Open(filename)
+		fail(err)
+		data, err := ioutil.ReadAll(f)
+		fail(err)
+		value = string(data)
+		f.Close()
+	}
+
+	api := resolveAPI(fmt.Sprintf(properties, pc.subscription, environment, aspect))
+	np := NewProperties("customer-properties", value)
+	resp := pc.putJSONorFail(api, np)
+	readJson(resp.Body, &p)
+
+	return p
+}
+
+func (pc *Client) GetCustomerProperties(environment, aspect string) (p Properties) {
+
+	api := resolveAPI(fmt.Sprintf(properties, pc.subscription, environment, aspect))
 	resp := pc.getOrFail(api)
 	readJson(resp.Body, &p)
 

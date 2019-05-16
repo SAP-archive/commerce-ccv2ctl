@@ -10,7 +10,16 @@ type Build struct {
 }
 
 type Properties struct {
-	Key, Value string
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
+func NewProperties(key, value string) Properties {
+	p := Properties{}
+	p.Key = key
+	p.Value = value
+
+	return p
 }
 
 type BuildMeta struct {
