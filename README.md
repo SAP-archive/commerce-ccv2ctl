@@ -3,6 +3,8 @@
 
 # ccv2ctl - SAP Commerce Cloud Portal CLI
 
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W7VS24)
+
 This tool allows you to:
 
 - get data about builds and create (=start) new builds:
