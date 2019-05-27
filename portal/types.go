@@ -94,11 +94,11 @@ type RunningDeployment struct {
 }
 
 type InitialPasswordEntry struct {
-	Uid                          string
-	Password                     string
+	Uid      string
+	Password string
 }
 
 type InitialPasswords struct {
-	Key                          string
-	Value                        []InitialPasswordEntry
+	Key   string
+	Value []InitialPasswordEntry
 }

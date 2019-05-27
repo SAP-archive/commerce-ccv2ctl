@@ -7,10 +7,14 @@ import (
 )
 
 var build, environment, mode string
+
+// .../v1/deploymentmodes
 var allowedModes = map[string]struct{}{
-	"initialize": {},
-	"update":     {},
-	"none":       {},
+	"offline_none":   {},
+	"none":           {},
+	"offline_update": {},
+	"update":         {},
+	"initialize":     {},
 }
 
 func allowedOut() string {

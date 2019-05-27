@@ -15,8 +15,8 @@ Example:
   ccv2ctl get deploymenthistory d1
 
 `,
-	Args:    cobra.ExactArgs(1),
-	Run:     getAndPrintDeploymentHistory,
+	Args: cobra.ExactArgs(1),
+	Run:  getAndPrintDeploymentHistory,
 }
 
 func getAndPrintDeploymentHistory(cmd *cobra.Command, args []string) {

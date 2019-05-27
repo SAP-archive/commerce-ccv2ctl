@@ -30,6 +30,12 @@ func fail(e error) {
 		panic(e)
 	}
 }
+func failWithBodyDump(e error, resp *http.Response) {
+	if e != nil {
+		dumpBody(resp.Body)
+		panic(e)
+	}
+}
 
 func chainingResolver(base *url.URL) func(action string) *url.URL {
 	b := base
@@ -144,7 +150,7 @@ func NewClient(subscription string, certPEMBlock, keyPEMBlock []byte, jarfile st
 func needLogin(resp *http.Response) bool {
 
 	if resp.StatusCode >= 300 {
-		panic(fmt.Errorf("Login: Expected HTTP 2XX status, got %d", resp.StatusCode))
+		failWithBodyDump(fmt.Errorf("Login: Expected HTTP 2XX status, got %d", resp.StatusCode), resp)
 	}
 	return resp.Header.Get("com.sap.cloud.security.login") != ""
 }
@@ -158,7 +164,7 @@ func (pc *Client) getOrFail(u *url.URL) *http.Response {
 	resp, err := pc.hc.Get(u.String())
 	fail(err)
 	if resp.StatusCode >= 300 {
-		fail(fmt.Errorf("GET %s: Expected HTTP 2XX status, got %d", u.String(), resp.StatusCode))
+		failWithBodyDump(fmt.Errorf("GET %s: Expected HTTP 2XX status, got %d", u.String(), resp.StatusCode), resp)
 	}
 	return resp
 }
@@ -166,8 +172,8 @@ func (pc *Client) getOrFail(u *url.URL) *http.Response {
 func (pc *Client) postJSONorFail(u *url.URL, payload interface{}) *http.Response {
 	j, err := json.Marshal(payload)
 	request, err := http.NewRequest("POST", u.String(), bytes.NewReader(j))
-	request.Header.Add("content-type", "application/json")
 	fail(err)
+	request.Header.Add("content-type", "application/json")
 	for _, c := range pc.hc.Jar.Cookies(u) {
 		if c.Name == "XSRF-TOKEN" {
 			request.Header.Add("x-xsrf-token", c.Value)
@@ -176,7 +182,7 @@ func (pc *Client) postJSONorFail(u *url.URL, payload interface{}) *http.Response
 	resp, err := pc.hc.Do(request)
 	fail(err)
 	if resp.StatusCode >= 300 {
-		fail(errors.New(fmt.Sprintf("POST %s: Expected HTTP 2XX status, got %d", u.String(), resp.StatusCode)))
+		failWithBodyDump(errors.New(fmt.Sprintf("POST %s: Expected HTTP 2XX status, got %d", u.String(), resp.StatusCode)), resp)
 	}
 
 	return resp
@@ -185,8 +191,8 @@ func (pc *Client) postJSONorFail(u *url.URL, payload interface{}) *http.Response
 func (pc *Client) putJSONorFail(u *url.URL, payload interface{}) *http.Response {
 	j, err := json.Marshal(payload)
 	request, err := http.NewRequest("PUT", u.String(), bytes.NewReader(j))
-	request.Header.Add("content-type", "application/json")
 	fail(err)
+	request.Header.Add("content-type", "application/json")
 	for _, c := range pc.hc.Jar.Cookies(u) {
 		if c.Name == "XSRF-TOKEN" {
 			request.Header.Add("x-xsrf-token", c.Value)
@@ -195,7 +201,7 @@ func (pc *Client) putJSONorFail(u *url.URL, payload interface{}) *http.Response 
 	resp, err := pc.hc.Do(request)
 	fail(err)
 	if resp.StatusCode >= 300 {
-		fail(errors.New(fmt.Sprintf("PUT %s: Expected HTTP 2XX status, got %d", u.String(), resp.StatusCode)))
+		failWithBodyDump(errors.New(fmt.Sprintf("PUT %s: Expected HTTP 2XX status, got %d", u.String(), resp.StatusCode)), resp)
 	}
 
 	return resp
@@ -219,7 +225,7 @@ func dumpBody(r io.ReadCloser) {
 	defer r.Close()
 	all, err := ioutil.ReadAll(r)
 	fail(err)
-	fmt.Println(string(all))
+	fmt.Fprintln(os.Stderr, string(all))
 }
 
 const builds = "/v1/subscriptions/%s/builds/"
@@ -333,7 +339,7 @@ func (pc *Client) SetCustomerProperties(environment, aspect, filename string) (p
 
 	var value string
 
-	if (filename == "-") {
+	if filename == "-" {
 		data, err := ioutil.ReadAll(os.Stdin)
 		fail(err)
 		value = string(data)

@@ -17,8 +17,8 @@ Example:
   ccv2ctl set customerproperties d1 -a hcs_aspect -f properties
 
 `,
-	Args:    cobra.ExactArgs(1),
-	Run:     setCustomerProperties,
+	Args: cobra.ExactArgs(1),
+	Run:  setCustomerProperties,
 }
 
 func setCustomerProperties(cmd *cobra.Command, args []string) {

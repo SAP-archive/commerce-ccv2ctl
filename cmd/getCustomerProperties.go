@@ -17,8 +17,8 @@ Example:
   ccv2ctl get customerproperties d1 -a hcs_aspect
 
 `,
-	Args:    cobra.ExactArgs(1),
-	Run:     getAndPrintCustomerProperties,
+	Args: cobra.ExactArgs(1),
+	Run:  getAndPrintCustomerProperties,
 }
 
 func getAndPrintCustomerProperties(cmd *cobra.Command, args []string) {
