@@ -25,7 +25,7 @@ This tool allows you to:
       
 - trigger a deployment
 
-       ccv2ctl create deployment --build 20180930.3 --environment d1 --mode none
+      ccv2ctl create deployment --build 20180930.3 --environment d1
 
 - get data about previous deployments
 
