@@ -3,8 +3,6 @@
 
 # ccv2ctl - SAP Commerce Cloud Portal CLI
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W7VS24)
-
 This tool allows you to:
 
 - get data about builds and create (=start) new builds:
@@ -102,7 +100,7 @@ Once we have an authenticated session, we can call the same REST APIs that the C
 
 ## Contribution Guide
 
-Here is a good explaination on how to fork and contribute to a  Go project without changing import paths in your fork:
+Here is a good explanation on how to fork and contribute to a  Go project without changing import paths in your fork:
 
 <http://code.openark.org/blog/development/forking-golang-repositories-on-github-and-managing-the-import-path>
 

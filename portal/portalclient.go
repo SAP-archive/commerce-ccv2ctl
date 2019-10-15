@@ -298,10 +298,10 @@ func (pc *Client) GetBuildLogReader(code string) io.ReadCloser {
 	return log
 }
 
-func (pc *Client) CreateDeployment(environment, mode, release string) (r RunningDeployment) {
+func (pc *Client) CreateDeployment(environment, migrationMode, deploymentMode, release string) (r RunningDeployment) {
 
 	api := resolveAPI(fmt.Sprintf(deployment, pc.subscription))
-	d := NewDeployment(environment, mode, release)
+	d := NewDeployment(environment, migrationMode, deploymentMode, release)
 	resp := pc.postJSONorFail(api, d)
 	readJson(resp.Body, &r)
 

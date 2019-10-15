@@ -65,17 +65,32 @@ func NewBuild(subscription, name, branch string) Build {
 	return b
 }
 
+// .../v1/deploymentmodes
+//{"deploymentMode":["ROLLING_UPDATE","RECREATE"],"dataMigrationMode":["NONE","UPDATE","INITIALIZE"]}
+var AllowedDeploymentModes = map[string]struct{}{
+	"ROLLING_UPDATE": {},
+	"RECREATE":       {},
+}
+var AllowedMigrationModes = map[string]struct{}{
+	"NONE":       {},
+	"UPDATE":     {},
+	"INITIALIZE": {},
+}
+
+//{"environmentCode":"d8","databaseUpdateMode":"NONE","strategy":"RECREATE","customerReleaseCode":"20180912.2","applicationCode":"commerce-cloud"}
 type Deployment struct {
 	EnvironmentCode     string `json:"environmentCode"`
-	Mode                string `json:"mode"`
+	DatabaseUpdateMode  string `json:"databaseUpdateMode"`
+	Strategy            string `json:"strategy"`
 	CustomerReleaseCode string `json:"customerReleaseCode"`
 	ApplicationCode     string `json:"applicationCode"`
 }
 
-func NewDeployment(environment, mode, releaseCode string) Deployment {
+func NewDeployment(environment, migrationMode, updateMode, releaseCode string) Deployment {
 	d := Deployment{}
 	d.EnvironmentCode = environment
-	d.Mode = mode
+	d.DatabaseUpdateMode = migrationMode
+	d.Strategy = updateMode
 	d.CustomerReleaseCode = releaseCode
 	d.ApplicationCode = CLOUD_APPLICATION
 
