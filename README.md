@@ -3,9 +3,10 @@
 
 > With the recent release of the official [Command Line Interface][cli] for CCv2 there is little reason to maintain this project further.
 >
+> If you need a specific feature, please drop me a message on [LinkedIn][lkdin] asking about my consulting rates.
+>
 > That said, I'm happy to review and merge any pull requests with bugfixes or new features.
 >
-> If you need a specific feature, please drop me a message on [LinkedIn][lkdin] asking about my consulting rates.
 
 [cli]: https://help.sap.com/viewer/1be46286b36a4aa48205be5a96240672/SHIP/en-US/8acde53272c64efb908b9f0745498015.html
 [lkdin]: https://www.linkedin.com/in/markus-perndorfer
