@@ -8,7 +8,7 @@
 > If you need a specific feature, please drop me a message on [LinkedIn][lkdin] asking about my consulting rates.
 
 [cli]: https://help.sap.com/viewer/1be46286b36a4aa48205be5a96240672/SHIP/en-US/8acde53272c64efb908b9f0745498015.html
-[lkdin]: https://www.linkedin.com/in/markus-perndorfer-42787399
+[lkdin]: https://www.linkedin.com/in/markus-perndorfer
 
 # ccv2ctl - SAP Commerce Cloud Portal CLI
 
