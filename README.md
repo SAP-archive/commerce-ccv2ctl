@@ -107,7 +107,3 @@ You need to export the certificate and the key into two PEM-encoded files so the
 It simulates the single-sign-on flow of the frontend using a SAP Passport client certificate.
 
 Once we have an authenticated session, we can call the same REST APIs that the Cloud Portal uses.
-
-## Contribution Guide
-
-
