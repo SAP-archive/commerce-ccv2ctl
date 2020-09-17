@@ -9,6 +9,11 @@ type Build struct {
 	SubscriptionCode string `json:"subscriptionCode"`
 }
 
+type BuildResponse struct {
+	SubscriptionCode string
+	Code             string
+}
+
 type Properties struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
@@ -23,19 +28,17 @@ func NewProperties(key, value string) Properties {
 }
 
 type BuildMeta struct {
+	SubscriptionCode             string
+	ApplicationCode              string
+	ApplicationDefinitionVersion string
 	Code                         string
 	Name                         string
 	CreatedBy                    string
 	Status                       string
 	Branch                       string
 	BuildVersion                 string
-	BuildStartTime               string
-	BuildEndTime                 string
-	ApplicationName              string
-	ApplicationCode              string
-	ApplicationDefinitionVersion string
-	CreatedOn                    string
-	ProgressData                 interface{}
+	BuildStartTimeStamp          string
+	BuildEndTimeStamp            string
 	Properties                   []Properties
 }
 
@@ -51,8 +54,8 @@ type PageParams struct {
 }
 
 type BuildPage struct {
-	Params  PageParams
-	Content []BuildMeta
+	Count int
+	Value []BuildMeta
 }
 
 func NewBuild(subscription, name, branch string) Build {
@@ -79,11 +82,10 @@ var AllowedMigrationModes = map[string]struct{}{
 
 //{"environmentCode":"d8","databaseUpdateMode":"NONE","strategy":"RECREATE","customerReleaseCode":"20180912.2","applicationCode":"commerce-cloud"}
 type Deployment struct {
-	EnvironmentCode     string `json:"environmentCode"`
-	DatabaseUpdateMode  string `json:"databaseUpdateMode"`
-	Strategy            string `json:"strategy"`
-	CustomerReleaseCode string `json:"customerReleaseCode"`
-	ApplicationCode     string `json:"applicationCode"`
+	EnvironmentCode    string `json:"environmentCode"`
+	DatabaseUpdateMode string `json:"databaseUpdateMode"`
+	Strategy           string `json:"strategy"`
+	BuildCode          string `json:"buildCode"`
 }
 
 func NewDeployment(environment, migrationMode, updateMode, releaseCode string) Deployment {
@@ -91,21 +93,40 @@ func NewDeployment(environment, migrationMode, updateMode, releaseCode string) D
 	d.EnvironmentCode = environment
 	d.DatabaseUpdateMode = migrationMode
 	d.Strategy = updateMode
-	d.CustomerReleaseCode = releaseCode
-	d.ApplicationCode = CLOUD_APPLICATION
+	d.BuildCode = releaseCode
 
 	return d
 }
 
-type RunningDeployment struct {
-	CustomerReleaseCode          string
-	EnvironmentCode              string
-	Mode                         string
-	ApplicationCode              string
-	ScheduledDate                string
-	RollingDeployment            bool
-	ApplicationDefinitionVersion string
-	Status                       string
+type DeploymentResponse struct {
+	SubscriptionCode string
+	Code             string
+}
+
+type DeploymentMeta struct {
+	Code                          string
+	SubscriptionCode              string
+	CreatedBy                     string
+	CreatedTimestamp              string
+	BuildCode                     string
+	EnvironmentCode               string
+	DatabaseUpdateMode            string
+	Strategy                      string
+	ScheduledTimestamp            string
+	DeployedTimestamp             string
+	FailedTimestamp               string
+	UndeployedTimestamp           string
+	Status                        string
+	CanceledBy                    string
+	CanceledTimestamp             string
+	CancellationFinishedTimestamp string
+	CancellationFailed            string
+	Cancelation                   string
+}
+
+type DeploymentPage struct {
+	Value []DeploymentMeta
+	Count int
 }
 
 type InitialPasswordEntry struct {

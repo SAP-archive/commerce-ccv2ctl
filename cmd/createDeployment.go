@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sap-commerce-tools/ccv2ctl/portal"
-	"github.com/spf13/cobra"
 	"strings"
+
+	"github.com/sap/commerce-ccv2ctl/portal"
+	"github.com/spf13/cobra"
 )
 
 func commaSeparatedKeys(input map[string]struct{}) string {

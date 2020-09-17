@@ -7,14 +7,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	persistentjar "github.com/monster1025/persistent-cookiejar"
-	"golang.org/x/net/html"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
-	"time"
+
+	persistentjar "github.com/monster1025/persistent-cookiejar"
+	"golang.org/x/net/html"
 )
 
 var PORTAL, _ = url.Parse("https://portal.commerce.ondemand.com/")
@@ -63,7 +63,6 @@ func parseForm(r io.Reader) (string, url.Values, error) {
 	if err != nil {
 		return "", nil, err
 	}
-
 	var action string
 	params := make(url.Values)
 
@@ -89,6 +88,7 @@ func parseForm(r io.Reader) (string, url.Values, error) {
 		return nil
 	}
 	err = recurse(doc)
+	// fmt.Printf("action=%s, params=%s\n", action, params)
 	return action, params, err
 }
 
@@ -209,8 +209,13 @@ func (pc *Client) putJSONorFail(u *url.URL, payload interface{}) *http.Response 
 
 func readJson(r io.ReadCloser, j interface{}) {
 	defer r.Close()
-	dec := json.NewDecoder(r)
-	fail(dec.Decode(j))
+	bodyBytes, err := ioutil.ReadAll(r)
+	dec := json.NewDecoder(bytes.NewReader(bodyBytes))
+	err = dec.Decode(j)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, string(bodyBytes))
+	}
+	fail(err)
 }
 
 func resolveAPI(a string) *url.URL {
@@ -228,24 +233,22 @@ func dumpBody(r io.ReadCloser) {
 	fmt.Fprintln(os.Stderr, string(all))
 }
 
-const builds = "/v1/subscriptions/%s/builds/"
+const builds = "/v2/subscriptions/%s/builds/"
 const buildLogs = builds + "%s/logs/"
-const allBuilds = "/v1/subscriptions/%s/applications/commerce-cloud/builds/"
-const deployment = "/v1/subscriptions/%s/build"
-const running = "/v1/subscriptions/%s/environments/%s/runningdeployments/"
-const deployments = "/v1/subscriptions/%s/environments/%s/deployments"
+
+const deployment = "/v2/subscriptions/%s/deployments/"
+
 const passwords = "/v1/subscriptions/%s/environments/%s/serviceconfiguration/hcs_admin/property/initialpassword"
 const properties = "/v1/subscriptions/%s/environments/%s/serviceconfiguration/%s/property/customer-properties"
 
 func (pc *Client) GetAllBuilds() (meta []BuildMeta) {
 
-	action := resolveAPI(fmt.Sprintf(allBuilds, pc.subscription) + "?page=0&pageSize=20&limit=20&sort=desc(buildStartTime)")
-
+	action := resolveAPI(fmt.Sprintf(builds, pc.subscription) + "?$top=20&$skip=0&$count=true&$orderby=buildStartTimestamp%%20desc")
 	var page BuildPage
 	resp := pc.getOrFail(action)
 	readJson(resp.Body, &page)
 
-	return page.Content
+	return page.Value
 }
 
 func (pc *Client) GetBuild(code string) (meta BuildMeta) {
@@ -257,29 +260,15 @@ func (pc *Client) GetBuild(code string) (meta BuildMeta) {
 	return meta
 }
 
-func (pc *Client) CreateBuild(name, branch string) (newBuild BuildMeta) {
+func (pc *Client) CreateBuild(name, branch string) (r BuildResponse) {
 
 	action := resolveAPI(fmt.Sprintf(builds, pc.subscription))
 
 	build := NewBuild(pc.subscription, name, branch)
 
-	pc.postJSONorFail(action, build)
-	//unfortunately, the response of the POST request is NOT the build meta data, but sth else.
-	//-> wait a bit, fetch all builds and find the matching one
-	time.Sleep(1 * time.Second)
-	all := pc.GetAllBuilds()
-	found := false
-	for _, b := range all {
-		if b.Name == name && b.Branch == branch {
-			if found {
-				fmt.Fprintf(os.Stderr, "WARN: more than one build with name=%s and branch=%s found. Using the first one\n", name, branch)
-			} else {
-				newBuild = b
-			}
-			found = true
-		}
-	}
-	return newBuild
+	resp := pc.postJSONorFail(action, build)
+	readJson(resp.Body, &r)
+	return r
 }
 
 func (pc *Client) GetBuildLogReader(code string) io.ReadCloser {
@@ -298,7 +287,7 @@ func (pc *Client) GetBuildLogReader(code string) io.ReadCloser {
 	return log
 }
 
-func (pc *Client) CreateDeployment(environment, migrationMode, deploymentMode, release string) (r RunningDeployment) {
+func (pc *Client) CreateDeployment(environment, migrationMode, deploymentMode, release string) (r DeploymentResponse) {
 
 	api := resolveAPI(fmt.Sprintf(deployment, pc.subscription))
 	d := NewDeployment(environment, migrationMode, deploymentMode, release)
@@ -308,18 +297,16 @@ func (pc *Client) CreateDeployment(environment, migrationMode, deploymentMode, r
 	return r
 }
 
-func (pc *Client) GetRunningDeployments(environment string) (r []RunningDeployment) {
-
-	api := resolveAPI(fmt.Sprintf(running, pc.subscription, environment))
+func (pc *Client) GetRunningDeployments(environment string) (r DeploymentPage) {
+	api := resolveAPI(fmt.Sprintf(deployment+"?environmentCode=%s&$top=1&$skip=0&$count=true&$orderby=scheduledTimestamp%%20desc", pc.subscription, environment))
 	resp := pc.getOrFail(api)
 	readJson(resp.Body, &r)
 
 	return r
 }
 
-func (pc *Client) GetDeployments(environment string) (r []RunningDeployment) {
-
-	api := resolveAPI(fmt.Sprintf(deployments, pc.subscription, environment))
+func (pc *Client) GetDeployments(environment string) (r DeploymentPage) {
+	api := resolveAPI(fmt.Sprintf(deployment+"?environmentCode=%s&$top=12&$skip=0&$count=true&$orderby=scheduledTimestamp%%20desc", pc.subscription, environment))
 	resp := pc.getOrFail(api)
 	readJson(resp.Body, &r)
 

@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sap-commerce-tools/ccv2ctl/portal"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/sap/commerce-ccv2ctl/portal"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -68,12 +69,11 @@ func Execute() {
 }
 
 func certAndKey() (certPEMBlock, keyPEMBlock []byte) {
-
 	certFile := viper.GetString("certfile")
 	certPEMBlock, err := ioutil.ReadFile(certFile)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not load certificate from '%s'.\n", certFile)
-		fmt.Fprintf(os.Stderr, `Check --certfile or "certfile: ..." in $HOME/.ccv2ctl.yaml\n"`)
+		fmt.Fprintln(os.Stderr, `Check --certfile or "certfile: ..." in $HOME/.ccv2ctl.yaml`)
 
 		os.Exit(1)
 	}
@@ -82,7 +82,7 @@ func certAndKey() (certPEMBlock, keyPEMBlock []byte) {
 	keyPEMBlock, err = ioutil.ReadFile(keyFile)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not load key from '%s'.\n", keyFile)
-		fmt.Fprint(os.Stderr, `Check --keyfile or "keyfile: ..." in $HOME/.ccv2ctl.yaml\n`)
+		fmt.Fprintln(os.Stderr, `Check --keyfile or "keyfile: ..." in $HOME/.ccv2ctl.yaml`)
 		os.Exit(1)
 	}
 
@@ -92,8 +92,8 @@ func certAndKey() (certPEMBlock, keyPEMBlock []byte) {
 func getSubscription() (s string) {
 	s = viper.GetString("subscription")
 	if s == "" {
-		fmt.Fprint(os.Stderr, "Subscription not set!\n")
-		fmt.Fprint(os.Stderr, `Use either the "--subscription"" flag or configure "subscription: ..." in $HOME/.ccv2ctl.yaml\n`)
+		fmt.Fprintln(os.Stderr, "Subscription not set!")
+		fmt.Fprintln(os.Stderr, `Use either the "--subscription" flag or configure "subscription: ..." in $HOME/.ccv2ctl.yaml`)
 		os.Exit(1)
 	}
 	return s
@@ -155,7 +155,13 @@ func initConfig() {
 	}
 	viper.SetEnvPrefix("CCV2")
 	viper.AutomaticEnv() // read in environment variables that match
-
-	if err := viper.ReadInConfig(); err == nil {
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		} else {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
 	}
 }
