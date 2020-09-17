@@ -1,14 +1,12 @@
 
-**Disclaimer**: *This tool is not officially supported by SAP. Use at your own risk*
+**Disclaimer**: *This tool is not officially supported by the SAP Commerce Cloud product team. Use at your own risk*
 
-> With the recent release of the official [Command Line Interface][cli] for CCv2 there is little reason to maintain this project further.
+> This tool should only be used if the [Command Line Interface][cli] for CCv2 doesn't uet provide any of the features of this project.
 >
-> If you need a specific feature, please drop me a message on [LinkedIn][lkdin] asking about my consulting rates.
->
-> That said, I'm happy to review and merge any pull requests with bugfixes or new features.
+> I'm happy to review and merge any pull request with bugfixes or new features, but be aware that `ccv2ctl` is not under active development
 >
 
-[cli]: https://help.sap.com/viewer/1be46286b36a4aa48205be5a96240672/SHIP/en-US/8acde53272c64efb908b9f0745498015.html
+[cli]: https://help.sap.com/viewer/9116f1cfd16049c3a531bfb6a681ff77/latest/en-US/8acde53272c64efb908b9f0745498015.html
 [lkdin]: https://www.linkedin.com/in/markus-perndorfer
 
 # ccv2ctl - SAP Commerce Cloud Portal CLI
@@ -67,6 +65,8 @@ Authentication is done via the client certificate for a S-User, the [SAP Passpor
 
 The S-User needs to be configured as `CUSTOMER_DEVELOPER` or `CUSTOMER_SYS_ADMIN` in the CCV2 Cloud Portal.
 
+**Make sure to *disable* two-factor authentication when you add the S-User to your subscription!**
+
 You need to export the certificate and the key into two PEM-encoded files so they can be used for `ccv2ctl` (you will be prompted for the keystore password):
 
     openssl pkcs12 -in /path/to/store.pfx -nokeys -nodes | openssl x509 -out certfile.pem
@@ -95,7 +95,7 @@ You need to export the certificate and the key into two PEM-encoded files so the
         # (optional) path to HTTP cookie jar to avoid DDOSing the portal.
         # Default value: $HOME/.ccv2jar
         
-   I recommend configuring the default `subscription`
+   I recommend configuring the default `subscription`, provided you only work on a single project.
    
 1. Enjoy
 
@@ -109,10 +109,5 @@ It simulates the single-sign-on flow of the frontend using a SAP Passport client
 Once we have an authenticated session, we can call the same REST APIs that the Cloud Portal uses.
 
 ## Contribution Guide
-
-Here is a good explanation on how to fork and contribute to a  Go project without changing import paths in your fork:
-
-<http://code.openark.org/blog/development/forking-golang-repositories-on-github-and-managing-the-import-path>
-
 
 
