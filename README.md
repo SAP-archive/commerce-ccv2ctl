@@ -1,5 +1,7 @@
 # ccv2ctl - SAP Commerce Cloud Portal CLI
 
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP/commerce-ccv2ctl)](https://api.reuse.software/info/github.com/SAP/commerce-ccv2ctl)
+
 This tool allows you to:
 
 - get data about builds and create (=start) new builds:

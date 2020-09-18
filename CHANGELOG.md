@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+\<TBD\>
+
+## [0.6.1] - 2020-09-18
+
 ### Changed
 
 - Use new `v2` API endpoints for builds and deployments.\
@@ -27,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [@yehorov-sap]: https://github.com/yehorov-sap
 
-[Unreleased]: https://github.com/SAP/commerce-ccv2ctl/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/SAP/commerce-ccv2ctl/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/SAP/commerce-ccv2ctl/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/SAP/commerce-ccv2ctl/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/SAP/commerce-ccv2ctl/compare/409c471d165eb8fc09ad01a5c25609e684942531...v0.5.0
