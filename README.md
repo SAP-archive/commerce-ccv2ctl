@@ -65,7 +65,8 @@ Authentication is done via the client certificate for a S-User, the [SAP Passpor
 
 The S-User needs to be configured as `CUSTOMER_DEVELOPER` or `CUSTOMER_SYS_ADMIN` in the CCV2 Cloud Portal.
 
-**Make sure to *disable* two-factor authentication when you add the S-User to your subscription!**
+**Make sure to *disable* two-factor authentication when you add the S-User to your subscription!**\
+If you enable 2FA _even once_, you _cannot_ get rid of it without a support ticket.
 
 You need to export the certificate and the key into two PEM-encoded files so they can be used for `ccv2ctl` (you will be prompted for the keystore password):
 
