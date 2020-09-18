@@ -1,14 +1,3 @@
-
-**Disclaimer**: *This tool is not officially supported by the SAP Commerce Cloud product team. Use at your own risk*
-
-> This tool should only be used if the [Command Line Interface][cli] for CCv2 doesn't yet provide any of the features of this project.
->
-> We are happy to review and merge any pull request with bugfixes or new features, but be aware that `ccv2ctl` is not under active development
->
-
-[cli]: https://help.sap.com/viewer/9116f1cfd16049c3a531bfb6a681ff77/latest/en-US/8acde53272c64efb908b9f0745498015.html
-[lkdin]: https://www.linkedin.com/in/markus-perndorfer
-
 # ccv2ctl - SAP Commerce Cloud Portal CLI
 
 This tool allows you to:
@@ -59,6 +48,15 @@ This tool allows you to:
 
 Since Go compiles executables as statically linked binaries, you can easily distribute this tool to you CI/CD servers (Jenkins, for example) and use it to automate builds and deployments to the Commerce Cloud.
 
+<!-- TOC depthFrom:2 depthTo:2 -->
+
+- [Installation](#installation)
+- [How it works](#how-it-works)
+- [Support](#support)
+- [Contributing](#contributing)
+
+<!-- /TOC -->
+
 ## Installation
 
 Authentication is done via the client certificate for a S-User, the [SAP Passport](https://support.sap.com/en/my-support/single-sign-on-passports.html)
@@ -107,3 +105,27 @@ You need to export the certificate and the key into two PEM-encoded files so the
 It simulates the single-sign-on flow of the frontend using a SAP Passport client certificate.
 
 Once we have an authenticated session, we can call the same REST APIs that the Cloud Portal uses.
+
+## Support
+
+If you encounter any bugs or have an idea for a new feature, please submit a new [issue] in this repository.
+
+[issue]: https://github.com/SAP/commerce-ccv2ctl/issues
+
+## Contributing
+
+Any contributions are welcome!
+
+Please:
+1. [Fork] the repository
+1. Implement and
+1. **Test** your changes
+1. Format the code (`gofmt -l -s -w .`)
+1. Open a new [pull request][pr]
+
+[Fork]: https://help.github.com/articles/fork-a-repo
+[pr]: https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
+
+### Developer Certificate of Origin (DCO)
+
+Due to legal reasons, contributors will be asked to accept a DCO before they submit the first pull request to this projects, this happens in an automated fashion during the submission process. SAP uses [the standard DCO text of the Linux Foundation](https://developercertificate.org/).
