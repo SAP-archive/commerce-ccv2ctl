@@ -9,14 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Call new `v2` API endpoints for builds and deployments.\
-  This also changes the output for all those commands, the tool returns the responses of the new API.
+- Use new `v2` API endpoints for builds and deployments.\
+  This also changes the output for all related commands, `ccv2ctl` returns the responses of the APIs as-is
 
 ## [0.6.0] - 2019-11-05
 
 ### Added
 
-- Support new deployment parameters "Data Migration Mode" and "Deployment Mode"'s
+- Support new deployment parameters "Data Migration Mode" and "Deployment Mode"
 
 ## [0.5.0] - 2019-06-04
 

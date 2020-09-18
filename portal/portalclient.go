@@ -213,7 +213,8 @@ func readJson(r io.ReadCloser, j interface{}) {
 	dec := json.NewDecoder(bytes.NewReader(bodyBytes))
 	err = dec.Decode(j)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, string(bodyBytes))
+		fmt.Fprintf(os.Stderr, "Could not parse JSON!\nAPI Response:\n")
+		fmt.Fprintln(os.Stderr, string(bodyBytes))
 	}
 	fail(err)
 }

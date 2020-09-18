@@ -7,7 +7,7 @@
 *.dll
 *.so
 *.dylib
-ccv2ctl
+ccv2ctl*
 
 # Test binary, build with `go test -c`
 *.test

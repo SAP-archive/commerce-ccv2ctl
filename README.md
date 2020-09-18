@@ -1,9 +1,9 @@
 
 **Disclaimer**: *This tool is not officially supported by the SAP Commerce Cloud product team. Use at your own risk*
 
-> This tool should only be used if the [Command Line Interface][cli] for CCv2 doesn't uet provide any of the features of this project.
+> This tool should only be used if the [Command Line Interface][cli] for CCv2 doesn't yet provide any of the features of this project.
 >
-> I'm happy to review and merge any pull request with bugfixes or new features, but be aware that `ccv2ctl` is not under active development
+> We are happy to review and merge any pull request with bugfixes or new features, but be aware that `ccv2ctl` is not under active development
 >
 
 [cli]: https://help.sap.com/viewer/9116f1cfd16049c3a531bfb6a681ff77/latest/en-US/8acde53272c64efb908b9f0745498015.html
