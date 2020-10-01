@@ -73,13 +73,12 @@ You need to export the certificate and the key into two PEM-encoded files so the
     openssl pkcs12 -in /path/to/store.pfx -nokeys -nodes | openssl x509 -out certfile.pem
     openssl pkcs12 -in /path/to/store.pfx -nocerts -nodes |  openssl rsa -out keyfile.pem
 
-1. Clone the repo and build the binary
-   ```
-    go get github.com/sap-commerce-tools/ccv2ctl
-    go build github.com/sap-commerce-tools/ccv2ctl
-   ```
-1. put the binary somewhere on your `$PATH`, or just run `go install github.com/sap-commerce-tools/ccv2ctl`
-1. create the config file `.ccv2ctl.yaml` in your [home directory](https://en.wikipedia.org/wiki/Home_directory) with following content:
+1. Download the pre-built binary for your OS from the Github [releases], rename it to `ccv2ctl`
+
+[releases]: https://github.com/SAP/commerce-ccv2ctl/releases
+
+1. Put the binary somewhere on your `$PATH`
+1. Create the config file `.ccv2ctl.yaml` in your [home directory](https://en.wikipedia.org/wiki/Home_directory) with following content:
 
         certfile: /path/to/certfile.pem
         # Path to PEM-encoded SAP Passport client certificate
@@ -95,9 +94,9 @@ You need to export the certificate and the key into two PEM-encoded files so the
         # cookiejar: /path/to/jar
         # (optional) path to HTTP cookie jar to avoid DDOSing the portal.
         # Default value: $HOME/.ccv2jar
-        
+
    I recommend configuring the default `subscription`, provided you only work on a single project.
-   
+
 1. Enjoy
 
 > You can provide all configuration options also on the commend line or as environment variables (prefixed with `CCV2_`) \
