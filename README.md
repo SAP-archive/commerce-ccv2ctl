@@ -1,3 +1,7 @@
+> **Archived**\
+> With the release of the `getProperty` / `putProperty` [APIs](https://help.sap.com/viewer/452dcbb0e00f47e88a69cdaeb87a925d/latest/en-US/66abfe678b55457fab235ce8039dda71.html), the offical API now covers all features of `ccv2ctl`
+> 
+
 # ccv2ctl - SAP Commerce Cloud Portal CLI
 
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/commerce-ccv2ctl)](https://api.reuse.software/info/github.com/SAP/commerce-ccv2ctl)
