@@ -1,6 +1,11 @@
 > **Archived**\
-> With the release of the `getProperty` / `putProperty` [APIs](https://help.sap.com/viewer/452dcbb0e00f47e88a69cdaeb87a925d/latest/en-US/66abfe678b55457fab235ce8039dda71.html), the offical API now covers all features of `ccv2ctl`
+> With the [2102 release][release] of the Cloud Portal, the offical APIs now cover all features of `ccv2ctl`
 > 
+> Please use the official [API][apis] / [CLI][cli] instead of this tool.
+> 
+[release]: https://help.sap.com/viewer/329b2a5ce90d4554bdc86641331b1049/LATEST/en-US/74907b7528a74462be14e5b5db280a65.html
+[apis]: https://help.sap.com/viewer/452dcbb0e00f47e88a69cdaeb87a925d/latest/en-US/66abfe678b55457fab235ce8039dda71.html
+[cli]: https://help.sap.com/viewer/9116f1cfd16049c3a531bfb6a681ff77/LATEST/en-US/8acde53272c64efb908b9f0745498015.html
 
 # ccv2ctl - SAP Commerce Cloud Portal CLI
 
